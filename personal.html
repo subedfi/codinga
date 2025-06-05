@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>व्यक्तिगत पृष्ठ - Ideal Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #f2f6f9, #e6ecf3);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #222;
+    }
+    header {
+      background-color: #004225;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      user-select: none;
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    #language-toggle {
+      background: #00a3c8;
+      border: none;
+      padding: 8px 16px;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    #language-toggle:hover {
+      background: #007a99;
+    }
+
+    /* Menu Icon */
+    #menu-icon {
+      width: 30px;
+      height: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      margin-right: 20px;
+      user-select: none;
+    }
+    #menu-icon div {
+      height: 4px;
+      background-color: white;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    /* Animate menu icon when open */
+    #menu-icon.open div:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    #menu-icon.open div:nth-child(2) {
+      opacity: 0;
+    }
+    #menu-icon.open div:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Side Menu */
+    nav#side-menu {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      background-color: #004225;
+      width: 220px;
+      height: calc(100% - 60px);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+      user-select: none;
+    }
+    nav#side-menu.open {
+      transform: translateX(0);
+    }
+    nav#side-menu ul {
+      list-style: none;
+      padding: 20px 0;
+    }
+    nav#side-menu ul li {
+      padding: 15px 30px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+    }
+    nav#side-menu ul li:hover, nav#side-menu ul li.active {
+      background-color: #006637;
+    }
+
+    main {
+      margin-top: 60px;
+      padding: 20px;
+      display: flex;
+      flex-grow: 1;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      gap: 40px;
+    }
+
+    /* Left titles */
+    .titles {
+      flex: 0 0 35%;
+      background: white;
+      border-radius: 40px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      user-select: none;
+    }
+    .titles ul {
+      list-style: none;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .titles ul li {
+      padding: 20px 30px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 50px 0 0 50px;
+      color: #004225;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .titles ul li:hover {
+      background-color: #e6f4f9;
+    }
+    .titles ul li.active {
+      background-color: #004225;
+      color: white;
+      box-shadow: inset 5px 0 0 #00a3c8;
+    }
+     nav {
+            position: fixed;
+            top: 70px;
+            left: -220px;
+            width: 200px;
+            background-color: #1a6642;
+            padding: 10px;
+            border-radius: 0 10px 10px 0;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        nav.show {
+            left: 0;
+        }
+     nav a {
+            display: block;
+            color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+
+        nav a:hover {
+            background-color: #003814;
+        }
+
+    /* Right content */
+    .content {
+      flex: 1;
+      background: white;
+      border-radius: 40px;
+      padding: 30px 40px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+      color: #222;
+      overflow-y: auto;
+      max-height: 600px;
+      user-select: text;
+      position: relative;
+    }
+
+    .content h2 {
+      color: #004225;
+      font-weight: 700;
+      margin-bottom: 15px;
+      user-select: none;
+    }
+    .content p {
+      font-size: 1rem;
+      line-height: 1.7;
+      white-space: pre-line;
+      user-select: text;
+    }
+
+    /* Fade in animation for content */
+    .content.fade-in {
+      animation: fadeInContent 0.6s ease forwards;
+    }
+    @keyframes fadeInContent {
+      from {opacity: 0; transform: translateX(30px);}
+      to {opacity: 1; transform: translateX(0);}
+    }
+
+    footer {
+      background-color: #003d25;
+      color: #e0e0e0;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 0.85rem;
+      user-select: none;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      main {
+        flex-direction: column;
+        padding: 15px;
+      }
+      .titles {
+        flex: none;
+        width: 100%;
+        max-height: 300px;
+        border-radius: 20px;
+      }
+      .titles ul li {
+        border-radius: 0;
+      }
+      .content {
+        max-height: none;
+        margin-top: 20px;
+        border-radius: 20px;
+      }
+      nav#side-menu {
+        top: 56px;
+        width: 180px;
+        height: calc(100% - 56px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; align-items:center;">
+    <div id="menu-icon" aria-label="Toggle menu" role="button" tabindex="0">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <h1 id="page-title">व्यक्तिगत पृष्ठ</h1>
+  </div>
+  <button id="language-toggle" aria-label="Switch Language">Switch to English</button>
+</header>
+
+<nav id="side-menu" aria-label="Primary navigation">
+  
+            <a href="index.html">Home</a>
+            <a href="education.html">Education</a>
+            <a href="personal.html">Personal</a>
+            <a href="int.html">Integration</a>
+            <a href="login.html">Login</a>
+            <a href="contact.html">Contact</a>
+       
+</nav>
+
+<main>
+  <div class="titles" aria-label="Section titles">
+    <ul id="titles-list">
+      <!-- Titles loaded here -->
+    </ul>
+  </div>
+  <section class="content" id="content-display" tabindex="0" aria-live="polite" aria-atomic="true">
+    <!-- Content displayed here -->
+  </section>
+</main>
+
+<footer>
+  © 2025 Ankit Subedi - All rights reserved.
+</footer>
+
+<script>
+  // Data for accordion content (same as before)
+  const contentData = [
+    {
+      id: "interest",
+      heading: {
+        ne: "मेरो रुचिहरु",
+        en: "My Interests"
+      },
+      content: {
+        ne: `मेरो रुचिहरु प्रोग्रामिङ, क्रिकेट खेल्ने, र नयाँ प्रविधिहरु सिक्नेमा आधारित छन्। खाली समयमा म प्रोग्रामिङ परियोजनाहरुमा काम गर्छु र मेरा सीपहरु सुधार गर्न रमाइलो मान्छु। म विभिन्न प्रकारका पुस्तकहरु पढ्न पनि रुचि राख्छु जसले मेरो सोच र ज्ञानलाई व्यापक बनाउँछ। क्रिकेट मेरो प्रिय खेल हो, जसले मलाई टीम भावना र अनुशासन सिकाएको छ। म साथीहरुसँग सामाजिक गतिविधिहरुमा पनि सक्रिय छु र सांस्कृतिक कार्यक्रमहरुमा भाग लिन्छु। मेरा हाबीहरु मेरो मनोबल बढाउँछन् र तनाव कम गर्छन्, जसले मलाई अध्ययनमा केन्द्रित हुन सहयोग गर्छ। म भोलिको लागि नयाँ चीजहरु सिक्न सदैव उत्साहित हुन्छु र मेरो रुचिहरु पनि समय अनुसार विकसित हुँदै आएका छन्।`,
+        en: `My interests include programming, playing cricket, and learning new technologies. In my free time, I work on programming projects and enjoy refining my skills. I also like reading various books that broaden my thinking and knowledge. Cricket is my favorite sport; it has taught me teamwork and discipline. I actively participate in social activities with friends and take part in cultural programs. My hobbies boost my morale and reduce stress, helping me focus on studies. I am always excited to learn new things for the future, and my interests have evolved over time.`
+      }
+    },
+    {
+      id: "futurePlans",
+      heading: {
+        ne: "भविष्य योजना",
+        en: "Future Plans"
+      },
+      content: {
+        ne: `मेरो भविष्य योजना प्रविधिमा आधारित छ। म कम्प्युटर इन्जिनियरिङ अध्ययन गरेर नेपालको प्रविधि क्षेत्रमा नयाँ आयामहरु थप्न चाहन्छु। मेरो उद्देश्य एउटा सफ्टवेयर इन्जिनियर बन्ने हो जसले समाजका विभिन्न समस्याहरु समाधान गर्ने सफ्टवेयर विकास गर्न सकोस्। साथै, म स्टार्टअप र नवप्रवर्तनमा जोड दिन चाहन्छु र नयाँ विचारहरु कार्यान्वयन गर्ने योजना बनाएको छु। मैले प्रविधिको माध्यमबाट शिक्षा र स्वास्थ्य सेवा सुधार्न सकिन्छ भन्नेमा विश्वास गर्छु। म निरन्तर सिक्ने र आफ्नो सीपलाई विकसित गर्ने लक्ष्यमा छु। भविष्यमा म एक प्रेरणादायक नेताको रुपमा परिचित हुन चाहन्छु जसले युवाहरुमा सकारात्मक प्रभाव पार्न सकोस्। म समाजको सेवा गर्ने र देशको प्रगतिको लागि योगदान दिने योजना बनाएको छु।`,
+        en: `My future plans are based on technology. I want to study computer engineering and add new dimensions to Nepal's tech sector. My goal is to become a software engineer who can develop software to solve various social problems. Additionally, I want to focus on startups and innovation and plan to implement new ideas. I believe technology can improve education and healthcare. I aim to keep learning and developing my skills. In the future, I want to be known as an inspiring leader who can positively influence youth. I plan to serve society and contribute to the country's progress.`
+      }
+    },
+    {
+      id: "innovation",
+      heading: {
+        ne: "नवप्रवर्तन",
+        en: "Innovation"
+      },
+      content: {
+        ne: `नवप्रवर्तन मेरो लागि क्रिएटिभिटी र समस्या समाधान गर्ने प्रक्रिया हो। म नयाँ प्रविधिहरु र विचारहरुलाई अपनाएर अनौठो र उपयोगी समाधानहरु विकास गर्न चाहन्छु। मेरो प्रयास सधैं नयाँ विधिहरु सिक्न र प्रयोग गर्नमा केन्द्रित हुन्छ। मैले प्रोजेक्टहरुमा विभिन्न उपकरण र प्रविधिहरु प्रयोग गरेर नवप्रवर्तनमा सुधार गरेको छु। नवप्रवर्तनले जीवनलाई सरल र प्रभावकारी बनाउँछ भन्ने मेरो विश्वास छ। म प्राविधिक समस्याहरुमा सोचाइको नयाँ कोणबाट अवलोकन गर्ने र समाधान खोज्ने सोच राख्छु। नवप्रवर्तनले समाजलाई अगाडि बढाउँछ र मानिसहरुको जीवनस्तर सुधार गर्छ। म नवप्रवर्तनमार्फत मेरो देशको विकासमा योगदान दिन चाहन्छु।`,
+        en: `Innovation for me is a process of creativity and problem-solving. I want to adopt new technologies and ideas to develop unique and useful solutions. My efforts are always focused on learning and applying new methods. I have improved innovation by using various tools and technologies in projects. I believe innovation makes life simpler and more effective. I approach technical problems with new perspectives to find solutions. Innovation drives society forward and improves people's living standards. I want to contribute to my country's development through innovation.`
+      }
+    },
+    {
+      id: "struggle",
+      heading: {
+        ne: "जीवन संघर्ष",
+        en: "Struggle in Life"
+      },
+      content: {
+        ne: `संघर्ष मेरो जीवनको अविभाज्य हिस्सा हो। मैले धेरै कठिनाइहरु सामना गरेको छु जसले मलाई बलियो बनाएको छ। कहिलेकाहीं आर्थिक समस्या, स्वास्थ्य समस्या, र समय व्यवस्थापनमा चुनौतीहरु आएको छ। तर म कहिल्यै हार मानिन र संघर्षलाई अवसरमा परिणत गर्ने प्रयास गरेको छु। मेरो परिवार र साथीहरुको समर्थनले मलाई हिम्मत दिएको छ। संघर्षले मलाई धैर्यता र अनुशासन सिकाएको छ र मेरो लक्ष्यप्रतिको प्रतिबद्धता बलियो बनाएको छ। म विश्वास गर्छु कि संघर्ष बिना सफलता सम्भव छैन र कठिनाइहरुले मानिसलाई अझ उचाइमा पुर्‍याउँछ।`,
+        en: `Struggle is an essential part of my life. I have faced various challenges that have made me stronger. Sometimes financial issues, health problems, and time management difficulties obstructed my path. But I never gave up and tried to turn struggles into opportunities. My family and friends' support has encouraged me. Struggles taught me patience and discipline and strengthened my commitment to goals. I believe success is not possible without struggle, and hardships elevate a person to higher levels.`
+      }
+    },
+    {
+      id: "familySupport",
+      heading: {
+        ne: "परिवारको समर्थन",
+        en: "Family Support"
+      },
+      content: {
+        ne: `मेरो परिवार मेरो जीवनको आधार हो। परिवारले मलाई सदैव माया र समर्थन दिएको छ। जब म समस्यामा पर्दछु, तब उनीहरुको साथले मलाई सहज महसुस हुन्छ। मेरो शैक्षिक र व्यक्तिगत जीवनमा परिवारको योगदान अतुलनीय छ। उनीहरुको प्रेरणा र विश्वासले म निरन्तर अगाडि बढिरहेको छु। परिवारले मलाई सधैं सही मार्ग देखाएको छ र जीवनका मूल्यहरु सिकाएको छ। उनीहरु मेरो सबैभन्दा ठूलो प्रोत्साहन स्रोत हुन् र म उनीहरुलाई धन्यवाद दिन चाहन्छु। मेरो भविष्यमा सफलताको लागि परिवारको समर्थन अत्यन्त महत्वपूर्ण छ।`,
+        en: `My family is the foundation of my life. They have always given me love and support. When I face problems, their presence makes me feel comforted. Their contribution to my academic and personal life is invaluable. Their encouragement and faith keep me moving forward. My family has always shown me the right path and taught me life values. They are my greatest source of motivation, and I want to thank them. Family support is extremely important for my future success.`
+      }
+    },
+    {
+      id: "pastSuccess",
+      heading: {
+        ne: "विगतका सफलताहरु",
+        en: "Past Success in Exams"
+      },
+      content: {
+        ne: `म विगतका परीक्षाहरुमा लगातार राम्रो नतिजा ल्याउने प्रयास गरेको छु। म मेहनत गरेर विषयहरुमा उच्च अंक ल्याउन सफल भएको छु जसले मलाई अझ बढी प्रेरणा दिएको छ। प्रत्येक परीक्षा मेरो लागि चुनौती र अवसर दुवै हो। मैले तयारीमा ध्यान केन्द्रित गरी, योजना अनुसार पढाइ गरेर सफल भएको छु। म विगतका परीक्षाबाट सिकेका कुराहरु आगामी परीक्षामा प्रयोग गर्छु। सफलताले मेरो आत्मविश्वास बढाएको छ र म अझ बढी मेहनत गर्न उत्प्रेरित भएको छु। मैले शिक्षकहरुको मार्गदर्शनलाई सदुपयोग गरेको छु र मेरो परिवारले पनि मलाई प्रेरित गरेको छ। भविष्यमा पनि म निरन्तर सफलता हासिल गर्ने लक्ष्यमा छु।`,
+        en: `I have consistently achieved good results in past exams. Through hard work, I have been able to score high marks in subjects, which has motivated me further. Every exam is both a challenge and an opportunity for me. I have focused on preparation and studied according to plan to succeed. I apply what I learned from past exams to future ones. Success has increased my confidence and inspired me to work harder. I have made good use of teachers' guidance and my family’s encouragement. I aim to continue achieving success in the future as well.`
+      }
+    }
+  ];
+
+  // Current language state
+  let currentLang = 'ne';
+
+  // References
+  const pageTitle = document.getElementById('page-title');
+  const languageToggle = document.getElementById('language-toggle');
+  const titlesList = document.getElementById('titles-list');
+  const contentDisplay = document.getElementById('content-display');
+  const menuIcon = document.getElementById('menu-icon');
+  const sideMenu = document.getElementById('side-menu');
+  const navItems = sideMenu.querySelectorAll('ul li');
+
+  // Render titles on left side
+  function renderTitles() {
+    titlesList.innerHTML = '';
+    contentData.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.textContent = item.heading[currentLang];
+      li.setAttribute('data-id', item.id);
+      li.setAttribute('tabindex', 0);
+      if (index === 0) li.classList.add('active');
+      titlesList.appendChild(li);
+
+      // Click event
+      li.addEventListener('click', () => {
+        setActiveTitle(item.id);
+      });
+      // Keyboard accessibility (Enter or Space)
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setActiveTitle(item.id);
+        }
+      });
+    });
+  }
+
+  // Set active title and show content on right
+  function setActiveTitle(id) {
+    // Remove active from all titles
+    titlesList.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+    // Add active to selected
+    const activeTitle = titlesList.querySelector(`li[data-id="${id}"]`);
+    if (activeTitle) activeTitle.classList.add('active');
+
+    // Show content with fade animation
+    const selected = contentData.find(item => item.id === id);
+    if (selected) {
+      contentDisplay.classList.remove('fade-in'); // reset animation
+      void contentDisplay.offsetWidth; // trigger reflow
+      contentDisplay.innerHTML = `<h2>${selected.heading[currentLang]}</h2><p>${selected.content[currentLang]}</p>`;
+      contentDisplay.classList.add('fade-in');
+    }
+  }
+
+  // Language toggle function
+  function toggleLanguage() {
+    currentLang = currentLang === 'ne' ? 'en' : 'ne';
+    pageTitle.textContent = currentLang === 'ne' ? 'व्यक्तिगत पृष्ठ' : 'Personal Page';
+    languageToggle.textContent = currentLang === 'ne' ? 'Switch to English' : 'Switch to Nepali';
+
+    renderTitles();
+    // Show content of active title in new language
+    const activeLi = titlesList.querySelector('li.active');
+    if (activeLi) setActiveTitle(activeLi.getAttribute('data-id'));
+  }
+
+  languageToggle.addEventListener('click', toggleLanguage);
+
+  // Menu toggle
+  menuIcon.addEventListener('click', () => {
+    menuIcon.classList.toggle('open');
+    sideMenu.classList.toggle('open');
+  });
+
+  // Accessibility for menu icon (keyboard)
+  menuIcon.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      menuIcon.click();
+    }
+  });
+
+  // Side menu tab click (just highlight active, can be extended)
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      // You can add content change or page navigation here
+      alert(`You clicked on tab: ${item.textContent}`);
+      // Close menu on small screens
+      if (window.innerWidth <= 900) {
+        menuIcon.classList.remove('open');
+        sideMenu.classList.remove('open');
+      }
+    });
+  });
+
+  // Initialize
+  renderTitles();
+  setActiveTitle(contentData[0].id);
+</script>
+
+
+</body>
+</html>

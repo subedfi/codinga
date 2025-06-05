@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ideal Home Integration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+  <style>
+    :root {
+      --bg-color: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      --text-color: #fff;
+    }
+    .theme-dark {
+      --bg-color: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      --text-color: #fff;
+    }
+    .theme-light {
+      --bg-color: linear-gradient(to right, #ffecd2, #fcb69f);
+      --text-color: #000;
+    }
+    .theme-blue {
+      --bg-color: linear-gradient(to right, #2193b0, #6dd5ed);
+      --text-color: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      transition: background-color 0.5s, color 0.5s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1100;
+    }
+    header h1 {
+      font-size: 2rem;
+      color: #00f5d4;
+      user-select: none;
+    }
+    .menu-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      cursor: pointer;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      width: 30px;
+      height: 28px;
+    }
+    .menu-icon div {
+      height: 4px;
+      background-color: #00f5d4;
+      border-radius: 2px;
+      transition: 0.4s;
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 200px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(7px);
+      color: #00f5d4;
+      padding: 70px 15px 20px;
+      transition: left 0.3s ease;
+      z-index: 1150;
+      user-select: none;
+      box-shadow: 2px 0 10px rgba(0,255,212,0.5);
+    }
+    .side-menu.active {
+      left: 0;
+    }
+    .side-menu ul {
+      list-style: none;
+    }
+    .side-menu ul li {
+      padding: 15px 10px;
+      border-bottom: 1px solid #00f5d4;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .side-menu ul li:hover {
+      background-color: #00f5d4;
+      color: #000;
+      border-radius: 5px;
+    }
+    .theme-toggle {
+      background: #00f5d4;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin-left: 10px;
+      user-select: none;
+    }
+    .theme-toggle:hover {
+      background: #06d6a0;
+
+    }
+    nav {
+      position: fixed;
+      top: 70px;
+      left: -220px;
+      width: 200px;
+      background-color: #1a6642;
+      padding: 10px;
+      border-radius: 0 10px 10px 0;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    nav.show {
+      left: 0;
+    }
+
+    nav a {
+      display: block;
+      color: #fff;
+      padding: 10px;
+      margin: 5px 0;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+
+    nav a:hover {
+      background-color: #003814;
+    }
+    .container {
+      padding: 40px 30px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      flex-grow: 1;
+      z-index: 1;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 20px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+    }
+    .card h2 {
+      margin-bottom: 15px;
+      color: #00f5d4;
+      user-select: none;
+    }
+    .video-box, canvas, #qr-canvas {
+      width: 100%;
+      height: 200px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+    }
+    #qr-canvas {
+      background: white;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      padding: 8px 12px;
+      margin-top: 8px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+      box-shadow: 0 0 10px #00f5d4;
+    }
+    button {
+      background: #00f5d4;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      color: #000;
+      user-select: none;
+    }
+    button:hover {
+      background: #06d6a0;
+    }
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .list-item {
+      background: rgba(0, 245, 212, 0.2);
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #004d40;
+    }
+    .list-item button {
+      background: #ff1744;
+      color: #fff;
+      padding: 4px 8px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      margin-left: 10px;
+      user-select: none;
+    }
+    .list-item button:hover {
+      background: #d50000;
+    }
+    .flex-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    footer {
+      padding: 20px;
+      text-align: center;
+      background: rgba(0,0,0,0.7);
+      color: #aaa;
+      user-select: none;
+      font-size: 0.9rem;
+    }
+    .developer-info {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--text-color);
+    }
+    /* Scrollbar for side menu */
+    .side-menu ul {
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    .side-menu ul::-webkit-scrollbar {
+      width: 6px;
+    }
+    .side-menu ul::-webkit-scrollbar-thumb {
+      background-color: #00f5d4;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="theme-dark">
+  <!-- Menu icon -->
+  <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu" role="button" tabindex="0" onkeydown="if(event.key==='Enter') toggleMenu()">
+    <div></div><div></div><div></div>
+  </div>
+
+  <!-- Side menu -->
+  <nav class="side-menu" id="sideMenu" aria-label="Main Menu">
+    <ul>
+      <li tabindex="0">    <a href="index.html">Home</a></li>
+      <li tabindex="0"> <a href="education.html">Education</a></li>
+      <li tabindex="0"><a href="personal.html">Personal</a></li>
+      <li tabindex="0"> <a href="int.html">Integration</a></li>
+      <li tabindex="0"><a href="login.html">Login</a></li>
+      <li tabindex="0"><a href="contact.html">Contact</a>
+</li>
+    </ul>
+  </nav>
+  
+
+
+  <header onclick="closeMenu(event)">
+    <h1>🏠 Ideal Home: Integration</h1>
+    <div>
+      <button class="theme-toggle" onclick="setTheme('dark')" aria-label="Switch to dark theme">Dark</button>
+      <button class="theme-toggle" onclick="setTheme('light')" aria-label="Switch to light theme">Light</button>
+      <button class="theme-toggle" onclick="setTheme('blue')" aria-label="Switch to blue theme">Blue</button>
+    </div>
+  </header>
+
+  <main class="container" onclick="closeMenu(event)" aria-live="polite">
+    <!-- CCTV Camera Simulation -->
+    <section class="card" aria-label="CCTV Camera Simulation">
+      <h2>CCTV Camera (Webcam Feed)</h2>
+      <video id="cctvVideo" class="video-box" autoplay muted playsinline></video>
+      <button id="toggleCamBtn" style="margin-top:10px;">Stop Camera</button>
+    </section>
+
+    <!-- Motion Detection Sensor -->
+    <section class="card" aria-label="Motion Detection Sensor Simulation">
+      <h2>Motion Detection Sensor</h2>
+      <canvas id="motionCanvas"></canvas>
+      <p style="margin-top:10px;">Motion Detected Count: <strong id="motionCount">0</strong></p>
+    </section>
+
+    <!-- Voice Control Light -->
+    <section class="card" aria-label="Voice Controlled Light">
+      <h2>Voice Control (Say: "Turn on light" / "Turn off light")</h2>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div id="lightBulb" style="width:50px; height:50px; background:#444; border-radius:50%; box-shadow:none; transition: all 0.5s;"></div>
+        <button id="startVoiceBtn">Start Voice Control</button>
+      </div>
+      <p id="voiceStatus" style="margin-top:10px; font-style: italic;">Voice control is off.</p>
+    </section>
+
+    <!-- Study Timetable -->
+    <section class="card" aria-label="Study Timetable">
+      <h2>Study Timetable</h2>
+      <form id="timetableForm">
+        <label for="subjectInput">Subject</label>
+        <input id="subjectInput" type="text" placeholder="Enter subject" required />
+        <label for="timeInput">Time</label>
+        <input id="timeInput" type="text" placeholder="e.g. 10:00 AM - 11:00 AM" required />
+        <button type="submit">Add Task</button>
+      </form>
+      <div id="timetableList" style="margin-top:15px; max-height: 200px; overflow-y: auto;"></div>
+    </section>
+
+    <!-- Transaction Management -->
+    <section class="card" aria-label="Transaction Management">
+      <h2>Transaction Management</h2>
+      <form id="transactionForm">
+        <label for="descInput">Description</label>
+        <input id="descInput" type="text" placeholder="e.g. Grocery shopping" required />
+        <label for="amountInput">Amount (USD)</label>
+        <input id="amountInput" type="number" min="0" step="0.01" placeholder="e.g. 50.25" required />
+        <button type="submit">Add Transaction</button>
+      </form>
+      <div id="transactionList" style="margin-top:15px; max-height: 200px; overflow-y: auto;"></div>
+      <p style="margin-top:10px; font-weight:600;">Total: $<span id="transactionTotal">0.00</span></p>
+    </section>
+
+    <!-- Item Tracking -->
+    <section class="card" aria-label="Item Tracking">
+      <h2>Item Tracking</h2>
+      <form id="itemForm">
+        <label for="itemNameInput">Item Name</label>
+        <input id="itemNameInput" type="text" placeholder="Enter item name" required />
+        <label for="itemQtyInput">Quantity</label>
+        <input id="itemQtyInput" type="number" min="1" step="1" value="1" required />
+        <button type="submit">Add / Update Item</button>
+      </form>
+      <div id="itemList" style="margin-top:15px; max-height: 200px; overflow-y: auto;"></div>
+    </section>
+
+    <!-- QR Code Generator -->
+    <section class="card" aria-label="QR Code Generator">
+      <h2>QR Code Generator</h2>
+      <input id="qrTextInput" type="text" placeholder="Enter text or URL" />
+      <button id="generateQRBtn">Generate QR Code</button>
+      <canvas id="qr-canvas" style="margin-top:15px;"></canvas>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Ideal Home | Smart Living Solutions for the Modern World</p>
+    <div class="developer-info">
+      Developed by Ankit Subedi, Class 12, Amar Singh Secondary School
+    </div>
+  </footer>
+
+<script>
+  // THEME SYSTEM
+  const themes = ['dark', 'light', 'blue'];
+  let currentTheme = 0;
+  function setTheme(theme) {
+    document.body.className = 'theme-' + theme;
+  }
+  function cycleTheme() {
+    currentTheme = (currentTheme + 1) % themes.length;
+    setTheme(themes[currentTheme]);
+  }
+  setTheme(themes[currentTheme]);
+  setInterval(cycleTheme, 10000);
+
+  // MENU TOGGLE
+  const sideMenu = document.getElementById('sideMenu');
+  function toggleMenu() {
+    sideMenu.classList.toggle('active');
+  }
+  function closeMenu(event) {
+    if (!event.target.closest('.side-menu') && !event.target.closest('.menu-icon')) {
+      sideMenu.classList.remove('active');
+    }
+  }
+  document.body.addEventListener('click', closeMenu);
+
+  // CCTV CAMERA (WEBCAM) SIMULATION
+  const video = document.getElementById('cctvVideo');
+  const toggleCamBtn = document.getElementById('toggleCamBtn');
+  let camStream = null;
+  async function startCamera() {
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      video.srcObject = camStream;
+      toggleCamBtn.textContent = 'Stop Camera';
+    } catch (e) {
+      video.innerHTML = 'Camera not accessible.';
+      toggleCamBtn.disabled = true;
+    }
+  }
+  function stopCamera() {
+    if (camStream) {
+      camStream.getTracks().forEach(track => track.stop());
+      camStream = null;
+      video.srcObject = null;
+      toggleCamBtn.textContent = 'Start Camera';
+    }
+  }
+  toggleCamBtn.onclick = () => {
+    if (camStream) stopCamera();
+    else startCamera();
+  };
+  startCamera();
+
+  // MOTION DETECTION SIMULATION (using webcam frames difference)
+  const motionCanvas = document.getElementById('motionCanvas');
+  const motionCtx = motionCanvas.getContext('2d');
+  motionCanvas.width = 320;
+  motionCanvas.height = 200;
+  let motionCount = 0;
+  const motionCountElem = document.getElementById('motionCount');
+
+  // We'll use the webcam feed for motion detection as well (same feed)
+  const motionVideo = document.createElement('video');
+  motionVideo.autoplay = true;
+  motionVideo.muted = true;
+  motionVideo.playsInline = true;
+
+  // Reuse camStream or get separate (for demo, reuse)
+  async function setupMotionVideo() {
+    if (!camStream) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 200 }, audio: false });
+        motionVideo.srcObject = stream;
+      } catch (e) {
+        motionCtx.fillStyle = '#555';
+        motionCtx.font = '16px Poppins';
+        motionCtx.fillText('Motion video not available', 10, 100);
+      }
+    } else {
+      motionVideo.srcObject = camStream;
+    }
+  }
+  setupMotionVideo();
+
+  let lastImageData = null;
+  function detectMotion() {
+    if (motionVideo.readyState === motionVideo.HAVE_ENOUGH_DATA) {
+      motionCtx.drawImage(motionVideo, 0, 0, motionCanvas.width, motionCanvas.height);
+      let currentFrame = motionCtx.getImageData(0, 0, motionCanvas.width, motionCanvas.height);
+      if (lastImageData) {
+        let diff = 0;
+        for (let i = 0; i < currentFrame.data.length; i += 4) {
+          // Compare brightness difference
+          let avgCurr = (currentFrame.data[i] + currentFrame.data[i + 1] + currentFrame.data[i + 2]) / 3;
+          let avgLast = (lastImageData.data[i] + lastImageData.data[i + 1] + lastImageData.data[i + 2]) / 3;
+          diff += Math.abs(avgCurr - avgLast);
+        }
+        diff = diff / (motionCanvas.width * motionCanvas.height);
+        if (diff > 10) {
+          motionCount++;
+          motionCountElem.textContent = motionCount;
+        }
+      }
+      lastImageData = currentFrame;
+    }
+    requestAnimationFrame(detectMotion);
+  }
+  detectMotion();
+
+  // VOICE CONTROL LIGHT
+  const lightBulb = document.getElementById('lightBulb');
+  const startVoiceBtn = document.getElementById('startVoiceBtn');
+  const voiceStatus = document.getElementById('voiceStatus');
+  let recognition = null;
+  let lightOn = false;
+
+  function updateLightBulb() {
+    if (lightOn) {
+      lightBulb.style.background = '#ffe066';
+      lightBulb.style.boxShadow = '0 0 20px 10px #ffea8a';
+    } else {
+      lightBulb.style.background = '#444';
+      lightBulb.style.boxShadow = 'none';
+    }
+  }
+  updateLightBulb();
+
+  startVoiceBtn.onclick = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      voiceStatus.textContent = "Sorry, your browser doesn't support Speech Recognition.";
+      return;
+    }
+    if (recognition) {
+      recognition.stop();
+      recognition = null;
+      voiceStatus.textContent = 'Voice control stopped.';
+      startVoiceBtn.textContent = 'Start Voice Control';
+      return;
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.continuous = true;
+
+    recognition.onstart = () => {
+      voiceStatus.textContent = 'Voice control is listening...';
+      startVoiceBtn.textContent = 'Stop Voice Control';
+    };
+    recognition.onend = () => {
+      voiceStatus.textContent = 'Voice control stopped.';
+      startVoiceBtn.textContent = 'Start Voice Control';
+      recognition = null;
+    };
+    recognition.onerror = e => {
+      voiceStatus.textContent = 'Error occurred in recognition: ' + e.error;
+    };
+    recognition.onresult = e => {
+      const transcript = e.results[e.results.length - 1][0].transcript.trim().toLowerCase();
+      // Check commands
+      if (transcript.includes('turn on light')) {
+        lightOn = true;
+        updateLightBulb();
+        voiceStatus.textContent = 'Light turned ON by voice command.';
+      }
+      else if (transcript.includes('turn off light')) {
+        lightOn = false;
+        updateLightBulb();
+        voiceStatus.textContent = 'Light turned OFF by voice command.';
+      }
+    };
+    recognition.start();
+  };
+
+  // STUDY TIMETABLE MANAGEMENT
+  const timetableForm = document.getElementById('timetableForm');
+  const timetableList = document.getElementById('timetableList');
+  let timetable = JSON.parse(localStorage.getItem('timetable') || '[]');
+
+  function renderTimetable() {
+    timetableList.innerHTML = '';
+    if (timetable.length === 0) {
+      timetableList.textContent = 'No study tasks yet.';
+      return;
+    }
+    timetable.forEach((task, i) => {
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <span><strong>${task.subject}</strong> — ${task.time}</span>
+        <button aria-label="Delete task ${task.subject}" data-index="${i}">Delete</button>
+      `;
+      timetableList.appendChild(div);
+    });
+  }
+  timetableList.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      const idx = e.target.dataset.index;
+      timetable.splice(idx, 1);
+      localStorage.setItem('timetable', JSON.stringify(timetable));
+      renderTimetable();
+    }
+  });
+  timetableForm.onsubmit = e => {
+    e.preventDefault();
+    const subject = e.target.subjectInput.value.trim();
+    const time = e.target.timeInput.value.trim();
+    if (subject && time) {
+      timetable.push({ subject, time });
+      localStorage.setItem('timetable', JSON.stringify(timetable));
+      renderTimetable();
+      e.target.reset();
+    }
+  };
+  renderTimetable();
+
+  // TRANSACTION MANAGEMENT
+  const transactionForm = document.getElementById('transactionForm');
+  const transactionList = document.getElementById('transactionList');
+  const transactionTotalElem = document.getElementById('transactionTotal');
+  let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+
+  function renderTransactions() {
+    transactionList.innerHTML = '';
+    if (transactions.length === 0) {
+      transactionList.textContent = 'No transactions recorded.';
+      transactionTotalElem.textContent = '0.00';
+      return;
+    }
+    let total = 0;
+    transactions.forEach((tx, i) => {
+      total += tx.amount;
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <span>${tx.description} — $${tx.amount.toFixed(2)}</span>
+        <button aria-label="Delete transaction ${tx.description}" data-index="${i}">Delete</button>
+      `;
+      transactionList.appendChild(div);
+    });
+    transactionTotalElem.textContent = total.toFixed(2);
+  }
+  transactionList.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      const idx = e.target.dataset.index;
+      transactions.splice(idx, 1);
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      renderTransactions();
+    }
+  });
+  transactionForm.onsubmit = e => {
+    e.preventDefault();
+    const description = e.target.descInput.value.trim();
+    const amount = parseFloat(e.target.amountInput.value);
+    if (description && !isNaN(amount) && amount >= 0) {
+      transactions.push({ description, amount });
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      renderTransactions();
+      e.target.reset();
+    }
+  };
+  renderTransactions();
+
+  // ITEM TRACKING
+  const itemForm = document.getElementById('itemForm');
+  const itemList = document.getElementById('itemList');
+  let items = JSON.parse(localStorage.getItem('items') || '[]');
+
+  function renderItems() {
+    itemList.innerHTML = '';
+    if (items.length === 0) {
+      itemList.textContent = 'No items tracked yet.';
+      return;
+    }
+    items.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <span>${item.name} — Qty: ${item.quantity}</span>
+        <button aria-label="Delete item ${item.name}" data-index="${i}">Delete</button>
+      `;
+      itemList.appendChild(div);
+    });
+  }
+  itemList.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      const idx = e.target.dataset.index;
+      items.splice(idx, 1);
+      localStorage.setItem('items', JSON.stringify(items));
+      renderItems();
+    }
+  });
+  itemForm.onsubmit = e => {
+    e.preventDefault();
+    const name = e.target.itemNameInput.value.trim();
+    const quantity = parseInt(e.target.itemQtyInput.value);
+    if (name && quantity > 0) {
+      // If item exists, update quantity, else add
+      const existing = items.find(it => it.name.toLowerCase() === name.toLowerCase());
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        items.push({ name, quantity });
+      }
+      localStorage.setItem('items', JSON.stringify(items));
+      renderItems();
+      e.target.reset();
+    }
+  };
+  renderItems();
+
+  // QR CODE GENERATOR
+  const qrTextInput = document.getElementById('qrTextInput');
+  const generateQRBtn = document.getElementById('generateQRBtn');
+  const qrCanvas = document.getElementById('qr-canvas');
+
+  generateQRBtn.onclick = () => {
+    const text = qrTextInput.value.trim();
+    if (!text) {
+      alert('Please enter text or URL to generate QR code.');
+      return;
+    }
+    const qr = new QRious({
+      element: qrCanvas,
+      value: text,
+      size: 200,
+      backgroundAlpha: 0,
+      foreground: '#00f5d4',
+      level: 'H',
+    });
+  };
+
+  // Accessibility: close side menu on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      sideMenu.classList.remove('active');
+    }
+  });
+</script>
+</body>
+</html>

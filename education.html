@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free Nepali educational resources for Class 11, 12 and IOE preparation with books, notes, literature, and mentor support." />
+  <meta name="keywords" content="Nepali class 11 books, class 12 books, IOE entrance preparation, free nepali books, education Nepal" />
+  <meta name="author" content="EduHub Nepal" />
+  <title>EduHub Nepal | Nepali Books & IOE Preparation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: #007bff;
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 5px;
+      padding: 5px 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      padding-left: 5px;
+    }
+    .nav-links {
+      position: fixed;
+      top: 0;
+      left: -240px;
+      width: 220px;
+      height: 100vh;
+      background-color: #007bff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 60px;
+      transition: left 0.3s ease;
+      z-index: 9999;
+    }
+    .nav-links a {
+      padding: 1rem;
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    body.nav-active .nav-links {
+      left: 0;
+    }
+    section {
+      padding: 2rem 1rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h2 {
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h3 {
+      margin-bottom: 0.5rem;
+    }
+    .card a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #f1f1f1;
+      font-size: 0.9rem;
+    }
+    .box {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-top: 1rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+    <h1>📘 EduHub Nepal</h1>
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search..." />
+    </div>
+  </header>
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="education.html">Education</a>
+    <a href="contact.html">Contact</a>
+    <a href="personal.html">Personal</a>
+    <a href="int.html">Integration</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <section id="education">
+    <h2>📘 Class 12 Books</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Physics</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/Physics_XII.pdf" target="_blank">Download PDF</a>
+      </div>
+      <div class="card">
+        <h3>Chemistry</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/Chemistry_XII.pdf" target="_blank">Download PDF</a>
+      </div>
+      <div class="card">
+        <h3>Mathematics</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/Math_XII.pdf" target="_blank">Download PDF</a>
+      </div>
+    </div>
+
+    <h2 style="margin-top:3rem;">📕 Class 11 Books</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Physics</h3>
+        <a href="subedi.mp4" target="_blank">Download PDF</a>
+      </div>
+      <div class="card">
+        <h3>Chemistry</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/Chemistry_XI.pdf" target="_blank">Download PDF</a>
+      </div>
+      <div class="card">
+        <h3>Mathematics</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/Math_XI.pdf" target="_blank">Download PDF</a>
+      </div>
+    </div>
+
+    <h2 style="margin-top:3rem;">📙 IOE Entrance Preparation</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>IOE Physics</h3>
+        <a href="https://ioe.edu.np/ioe-physics-book.pdf" target="_blank">Download PDF</a>
+      </div>
+      <div class="card">
+        <h3>IOE Chemistry</h3>
+        <a href="https://ioe.edu.np/ioe-chemistry-book.pdf" target="_blank">Download PDF</a>
+      </div>
+      <div class="card">
+        <h3>IOE Math</h3>
+        <a href="https://ioe.edu.np/ioe-math-book.pdf" target="_blank">Download PDF</a>
+      </div>
+    </div>
+
+    <h2 style="margin-top:3rem;">📖 Literature & Nepali Society</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Poetry (Kabita Sangraha)</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/NepaliPoetry.pdf" target="_blank">Read PDF</a>
+      </div>
+      <div class="card">
+        <h3>Nepali Society & Culture</h3>
+        <a href="https://cdn.moecdc.gov.np/downloads/SocietyCulture.pdf" target="_blank">Read PDF</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>📞 Contact & Mentor Chat</h2>
+    <div class="box">
+      <p>You can contact mentors via our integrated support platform. Use Zoom for live sessions and Discord for community chats.</p>
+      <ul>
+        <li><strong>Zoom Meeting:</strong> <a href="https://zoom.us/j/123456789" target="_blank" style="color:#007bff;">Join Now</a></li>
+        <li><strong>Mentor Chat:</strong> <a href="https://discord.gg/eduhubnepal" target="_blank" style="color:#007bff;">Join Discord</a></li>
+        <li><strong>Email:</strong> support@eduhubnepal.org</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 EduHub Nepal | Made with ❤️ by Ankit
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.body.classList.toggle('nav-active');
+    }
+    document.addEventListener('click', function(e) {
+      const nav = document.getElementById('navLinks');
+      const menuIcon = document.querySelector('.menu-icon');
+      if (!nav.contains(e.target) && !menuIcon.contains(e.target)) {
+        document.body.classList.remove('nav-active');
+      }
+    });
+  </script>
+</body>
+</html>
